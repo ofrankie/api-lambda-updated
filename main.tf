@@ -33,7 +33,7 @@ resource "aws_lambda_permission" "allow_api_gateway" {
 # API Gateway resources
 resource "aws_api_gateway_rest_api" "HelloWorld_api" {
   name        = "HelloWorld_api"
-  description = "API Gateway for ##workspace_name## version of de-secure-api-gateway"
+  description = "HelloWorld_api API Gateway"
   body        = "${data.template_file.HelloWorld_api_swagger.rendered}"
 }
 
