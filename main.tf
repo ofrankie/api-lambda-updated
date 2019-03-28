@@ -41,6 +41,20 @@ data "template_file" HelloWorld_api_swagger{
   template = "${file("swagger.yaml")}"
 }
 
+resource "aws_api_gateway_usage_plan" "HelloWorld_u_plan" {
+  name = "HelloWorld_u_plan"
+
+  api_stages {
+    api_id = "${aws_api_gateway_rest_api.aws_api_gateway_rest_api.HelloWorld_api.id}"
+    stage  = "${aws_api_gateway_deployment.HelloWorld_deployment_prod.stage_name}"
+  }
+}
+resource "aws_api_gateway_usage_plan_key" "HelloWorld_u_plan_key" {
+  key_id        = "${aws_api_gateway_api_key.HelloWorld-api-prod-key.id}"
+  key_type      = "API_KEY"
+  usage_plan_id = "${aws_api_gateway_usage_plan.HelloWorld_u_plan.id}"
+}
+
 resource "aws_api_gateway_api_key" "HelloWorld-api-prod-key" {
   name = "HelloWorld-api-prod-key"
 }
