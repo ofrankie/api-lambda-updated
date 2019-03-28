@@ -31,38 +31,14 @@ resource "aws_lambda_permission" "allow_api_gateway" {
 }
 
 # API Gateway resources
-resource "aws_api_gateway_rest_api" "HelloWorld_api" {
-  name = "HelloWorld_api"
-  description = "HelloWorld Rest Api"
+resource "aws_api_gateway_rest_api" "##workspace_name##-de-secure-api-gateway" {
+  name        = "##workspace_name##-de-secure-api-gateway"
+  description = "API Gateway for ##workspace_name## version of de-secure-api-gateway"
+  body        = "${data.template_file.de_secure_api_swagger.rendered}"
 }
 
-resource "aws_api_gateway_resource" "HelloWorld_api_resource" {
-  rest_api_id = "${aws_api_gateway_rest_api.HelloWorld_api.id}"
-  parent_id = "${aws_api_gateway_rest_api.HelloWorld_api.root_resource_id}"
-  path_part = "messages"
-  
-}
-
-resource "aws_api_gateway_method" "HelloWorld_api_method" {
-  rest_api_id = "${aws_api_gateway_rest_api.HelloWorld_api.id}"
-  resource_id = "${aws_api_gateway_resource.HelloWorld_api_resource.id}"
-  http_method = "GET"
-  authorization = "NONE"
-  api_key_required = true
-}
-
-# API Gateway Integration
-resource "aws_api_gateway_integration" "HelloWorld_api_method-integration" {
-  rest_api_id = "${aws_api_gateway_rest_api.HelloWorld_api.id}"
-  resource_id = "${aws_api_gateway_resource.HelloWorld_api_resource.id}"
-  http_method = "${aws_api_gateway_method.HelloWorld_api_method.http_method}"
-  type = "AWS_PROXY"
-  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.region}:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_function.HelloWorld_function.arn}/invocations"
-  integration_http_method = "GET"
-}
-
-resource "aws_api_gateway_api_key" "HelloWorld-api-prod-key" {
-  name = "HelloWorld-api-prod-key"
+data "template_file" de_secure_api_swagger{
+  template = "${file("combinedswagger.yaml")}"
 }
 
 resource "aws_api_gateway_deployment" "HelloWorld_deployment_prod" {
@@ -73,7 +49,6 @@ resource "aws_api_gateway_deployment" "HelloWorld_deployment_prod" {
   rest_api_id = "${aws_api_gateway_rest_api.HelloWorld_api.id}"
   stage_name = "api"
 }
-
 
 resource "aws_cloudfront_distribution" "HelloWorld_cloudfront" {
   depends_on = ["aws_lambda_function.HelloWorld_function"]
