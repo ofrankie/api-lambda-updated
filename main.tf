@@ -31,14 +31,14 @@ resource "aws_lambda_permission" "allow_api_gateway" {
 }
 
 # API Gateway resources
-resource "aws_api_gateway_rest_api" "##workspace_name##-de-secure-api-gateway" {
-  name        = "##workspace_name##-de-secure-api-gateway"
+resource "aws_api_gateway_rest_api" "HelloWorld_api" {
+  name        = "HelloWorld_api"
   description = "API Gateway for ##workspace_name## version of de-secure-api-gateway"
-  body        = "${data.template_file.de_secure_api_swagger.rendered}"
+  body        = "${data.template_file.HelloWorld_api_swagger.rendered}"
 }
 
-data "template_file" de_secure_api_swagger{
-  template = "${file("combinedswagger.yaml")}"
+data "template_file" HelloWorld_api_swagger{
+  template = "${file("swagger.yaml")}"
 }
 
 resource "aws_api_gateway_deployment" "HelloWorld_deployment_prod" {
