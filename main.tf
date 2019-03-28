@@ -45,7 +45,7 @@ resource "aws_api_gateway_usage_plan" "HelloWorld_u_plan" {
   name = "HelloWorld_u_plan"
 
   api_stages {
-    api_id = "${aws_api_gateway_rest_api.aws_api_gateway_rest_api.HelloWorld_api.id}"
+    api_id = "${aws_api_gateway_rest_api.HelloWorld_api.id}"
     stage  = "${aws_api_gateway_deployment.HelloWorld_deployment_prod.stage_name}"
   }
 }
