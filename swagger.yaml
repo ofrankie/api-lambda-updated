@@ -1,0 +1,27 @@
+---
+swagger: "2.0"
+info:
+  version: "2019-03-27T11:29:21Z"
+  title: "HelloWorld_api"
+host: "t36v4w6xwj.execute-api.eu-west-1.amazonaws.com"
+basePath: "/api"
+schemes:
+- "https"
+paths:
+  /messages:
+    get:
+      responses: {}
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:414514217411:function:HelloWorld_function/invocations"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "x-api-key"
+    in: "header"
